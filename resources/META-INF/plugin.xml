@@ -29,8 +29,7 @@
     </project-components>
 
     <actions>
-        <action id="InnerBuilder.generate" class="BindyGeneratorAction"
-                text="Builder..." description="${project.description}">
+        <action id="BindyGenerator.generate" class="BindyGeneratorAction" text="Model generator" description="${project.description}">
             <add-to-group group-id="GenerateGroup" anchor="after" relative-to-action="JavaGenerateGroup2"/>
             <keyboard-shortcut keymap="$default" first-keystroke="shift alt B"/>
         </action>

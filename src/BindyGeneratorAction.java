@@ -1,11 +1,17 @@
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataKeys;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiFile;
 import pl.lodz.p.BindyGeneratorApp;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by maciek on 01/02/16.
@@ -17,16 +23,16 @@ public class BindyGeneratorAction extends AnAction {
     }
 
     public void actionPerformed(AnActionEvent event) {
-        Project project = event.getData(PlatformDataKeys.PROJECT);
-        GenerateDialog dlg = new GenerateDialog();
+        VirtualFile file = DataKeys.VIRTUAL_FILE.getData(event.getDataContext());
+        PsiFile psiFile = event.getData(LangDataKeys.PSI_FILE);
+        GenerateDialog dlg = new GenerateDialog(file, psiFile);
         dlg.show();
-        System.out.println(dlg.isOK());
-
-        String[] a = new String[1];
-        try {
-            BindyGeneratorApp.generate(a);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (dlg.isOK()) {
+            try {
+                BindyGeneratorApp.generate(dlg.getArguments());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
